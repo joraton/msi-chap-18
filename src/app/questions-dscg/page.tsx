@@ -1,7 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Calendar, FileText, ChevronRight, Award, Target } from 'lucide-react';
+import { BookOpen, Calendar, FileText, ChevronRight, Award, Target, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 
 const sessions = [
@@ -285,6 +286,16 @@ const sessions = [
 ];
 
 export default function QuestionsDSCG() {
+  const [visibleCorrections, setVisibleCorrections] = useState<{[key: string]: boolean}>({});
+
+  const toggleCorrection = (sessionYear: string, questionIndex: number) => {
+    const key = `${sessionYear}-${questionIndex}`;
+    setVisibleCorrections(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
       <div className="max-w-6xl mx-auto">
@@ -368,28 +379,56 @@ export default function QuestionsDSCG() {
                         </div>
                       </div>
 
-                      {/* Correction */}
-                      <div className="bg-green-50 rounded-lg p-6">
-                        <div className="flex items-center gap-2 mb-4">
-                          <Award className="h-5 w-5 text-green-600" />
-                          <h4 className="text-lg font-semibold text-green-800">
-                            Correction
-                          </h4>
-                        </div>
-                        <div className="space-y-2">
-                          {q.correction.map((line, lineIndex) => (
-                            <div key={lineIndex} className="text-gray-700">
-                              {line === '' ? (
-                                <div className="h-2" />
-                              ) : (
-                                <p className="leading-relaxed">
-                                  {line.replace(/\*\*(.*?)\*\*/g, '$1')}
-                                </p>
-                              )}
-                            </div>
-                          ))}
-                        </div>
+                      {/* Correction Toggle Button */}
+                      <div className="mt-4">
+                        <button
+                          onClick={() => toggleCorrection(session.year, qIndex)}
+                          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 shadow-md"
+                        >
+                          {visibleCorrections[`${session.year}-${qIndex}`] ? (
+                            <>
+                              <EyeOff className="h-4 w-4" />
+                              Masquer la correction
+                            </>
+                          ) : (
+                            <>
+                              <Eye className="h-4 w-4" />
+                              Voir la correction
+                            </>
+                          )}
+                        </button>
                       </div>
+
+                      {/* Correction */}
+                      {visibleCorrections[`${session.year}-${qIndex}`] && (
+                        <motion.div 
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="bg-green-50 rounded-lg p-6 mt-4"
+                        >
+                          <div className="flex items-center gap-2 mb-4">
+                            <Award className="h-5 w-5 text-green-600" />
+                            <h4 className="text-lg font-semibold text-green-800">
+                              Correction
+                            </h4>
+                          </div>
+                          <div className="space-y-2">
+                            {q.correction.map((line, lineIndex) => (
+                              <div key={lineIndex} className="text-gray-700">
+                                {line === '' ? (
+                                  <div className="h-2" />
+                                ) : (
+                                  <p className="leading-relaxed">
+                                    {line.replace(/\*\*(.*?)\*\*/g, '$1')}
+                                  </p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
                     </div>
                   ))}
                 </div>

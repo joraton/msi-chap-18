@@ -29,20 +29,20 @@ export default function SectionBlock({
       whileHover={{ scale: 1.02 }}
       className="group"
     >
-      <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4 flex-1">
+      <div className="bg-white rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 border border-gray-100">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 flex-1">
             {/* Icon */}
-            <div className={`${bgColor} rounded-full p-3 group-hover:scale-110 transition-transform duration-300`}>
-              <Icon className={`h-6 w-6 ${color}`} />
+            <div className={`${bgColor} rounded-full p-2.5 sm:p-3 group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}>
+              <Icon className={`h-5 w-5 sm:h-6 sm:w-6 ${color}`} />
             </div>
 
             {/* Content */}
-            <div className="flex-1">
-              <h3 className="text-xl font-bold text-gray-900 mb-1">
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 truncate">
                 {title}
               </h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-gray-600 text-xs sm:text-sm leading-relaxed line-clamp-2">
                 {description}
               </p>
             </div>
@@ -51,7 +51,7 @@ export default function SectionBlock({
           {/* Button */}
           <Link
             href={href}
-            className={`${color.replace('text-', 'bg-')} hover:opacity-90 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 shadow-md`}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 shadow-md text-sm sm:text-base text-center flex-shrink-0"
           >
             Commencer
           </Link>
